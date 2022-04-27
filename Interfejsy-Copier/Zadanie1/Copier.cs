@@ -16,6 +16,7 @@ namespace Zadanie1
             {
                 state = IDevice.State.off;
             }
+            Console.WriteLine("...Device is off!");
         }
 
         public new void PowerOn()
@@ -25,6 +26,7 @@ namespace Zadanie1
                 state = IDevice.State.on;
                 Counter++;
             }
+            Console.WriteLine("...Device is On!");
         }
 
         public void Print(in IDocument document)
@@ -33,9 +35,9 @@ namespace Zadanie1
 
             var getDate = DateTime.Now.ToString("MM/dd/yyyy h:mm tt");
             var getName = document.GetFileName();
+            PrintCounter++;
 
             Console.WriteLine($"{getDate} Print: {getName}");
-            PrintCounter++;
         }
 
         public void Scan(out IDocument document, IDocument.FormatType formatType)
@@ -65,11 +67,28 @@ namespace Zadanie1
             }   
         }
 
+        public void Scan(out IDocument document)
+        { 
+            document = new PDFDocument(filename: null);
+
+            if (state != IDevice.State.off)
+            {
+                return;
+            }
+
+            ScanCounter++;
+            document = new PDFDocument(filename: "Scan" + ScanCounter);
+            Console.WriteLine(DateTime.Now + "Scan: " + document.GetFileName());
+        }
+
         public void ScanAndPrint()
         {
+            ScanCounter++;
+            PrintCounter++;
             if (state == IDevice.State.off) return;
             Scan(out IDocument document, IDocument.FormatType.JPG);
             Print(in document);
         }
+
     }
 }
