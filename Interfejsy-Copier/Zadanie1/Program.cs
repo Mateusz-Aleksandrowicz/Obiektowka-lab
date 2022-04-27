@@ -1,12 +1,21 @@
-﻿using System;
+﻿using ver1;
+using Zadanie1;
 
-namespace Zadanie1
+class Program
 {
-    class Program
+    static void Main()
     {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello World!");
-        }
+        var xerox = new Copier();
+        xerox.PowerOn();
+        IDocument doc1 = new PDFDocument("aaa.txt");
+        xerox.Print(in doc1);
+
+        IDocument doc2;
+        xerox.Scan(out doc2);
+
+        xerox.ScanAndPrint();
+        System.Console.WriteLine(xerox.Counter);
+        System.Console.WriteLine(xerox.PrintCounter);
+        System.Console.WriteLine(xerox.ScanCounter);
     }
 }
