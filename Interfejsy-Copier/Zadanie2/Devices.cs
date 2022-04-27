@@ -52,7 +52,7 @@ namespace ver1
 
         public interface IFax : IDevice
     {
-        void SendFax(out IDocument document);
+        void SendingFax(out IDocument document);
         void ReceiveFax(in IDocument document);
     }
 
