@@ -7,23 +7,14 @@ using ver1;
 
 namespace Zadanie2
 {
-    public class MultifunctionalDevice : IFax
+    public class MultifunctionalDevice : BaseDevice, IFax
     {
         public int Counter { get; set; }
         public int ScanCounter { get; set; }
         public int PrintCounter { get; set; }
-
+           
         public int FaxCounter { get; set; }
 
-        public List<string> faxes = new List<string>();
-
-
-        protected IDevice.State state = IDevice.State.off;
-
-        public IDevice.State GetState()
-        {
-            return state;
-        }
 
         public void PowerOff()
         {
@@ -86,22 +77,27 @@ namespace Zadanie2
             document = new PDFDocument(filename: "Scan" + ScanCounter);
             Console.WriteLine(DateTime.Now + "Scan: " + document.GetFileName());
         }
-        public void SendingFax(in IDocument document, string number)
+        public void SendingFax(out IDocument document)
         {
-            if (state == IDevice.State.off) return;
+            if (state == IDevice.State.off) { document = null; return; }
 
-            int.Parse(number);
+            Scan(out document);
 
-            Console.WriteLine(DateTime.Now + " Fax: " + document.GetFileName() + " To : " + number);
+            var date = DateTime.Now.ToString("MM/dd/yyyy h:mm tt");
+
             FaxCounter++;
+            Console.WriteLine($"{date} Fax sent: {document.GetFileName()}");
         }
 
         public void ReceiveFax(in IDocument document)
         {
-            foreach (string fax in faxes)
-            {
-                Console.WriteLine(fax);
-            }
+            if (state == IDevice.State.off) return;
+
+            var date = DateTime.Now.ToString("MM/dd/yyyy h:mm tt");
+
+            FaxCounter++;
+            Print(in document);
+            Console.WriteLine($"{date} Fax received: {document.GetFileName()}");
         }
     }
 }

@@ -52,9 +52,8 @@ namespace ver1
 
         public interface IFax : IDevice
     {
-        void Print(in IDocument document);
-        void Scan(out IDocument document, IDocument.FormatType formatType);
-        void SendingFax(in IDocument document, string number);
+        void SendingFax(out IDocument document);
+        void ReceiveFax(in IDocument document);
 
     }
 
