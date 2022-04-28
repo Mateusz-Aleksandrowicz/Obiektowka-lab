@@ -30,13 +30,16 @@ namespace Zadanie3
         public void PowerOn(IDevice device)
         {
 
-            if (device.GetState() == IDevice.State.off) Counter++;
+            if (device.GetState() == IDevice.State.off)
+                Counter++;
             device.PowerOn();
         }
         public new void PowerOn()
         {
-            if (GetState(scanner) == IDevice.State.off) Counter++;
-            if (GetState(printer) == IDevice.State.off) Counter++;
+            if (GetState(scanner) == IDevice.State.off)
+                Counter++;
+            if (GetState(printer) == IDevice.State.off)
+                Counter++;
             PowerOn(scanner);
             PowerOn(printer);
         }
