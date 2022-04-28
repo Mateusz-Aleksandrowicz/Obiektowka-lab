@@ -40,7 +40,7 @@ namespace Zadanie2
             Console.WriteLine($"{getDate} Print: {getName}");
         }
 
-        public void Scan(out IDocument document, IDocument.FormatType formatType)
+        public void Scan(out IDocument document, IDocument.FormatType formatType = IDocument.FormatType.JPG)
         {
             if (state == IDevice.State.off)
             {
@@ -67,24 +67,8 @@ namespace Zadanie2
             }   
         }
 
-        public void Scan(out IDocument document)
-        { 
-            document = new PDFDocument(filename: null);
-
-            if (state != IDevice.State.off)
-            {
-                return;
-            }
-
-            ScanCounter++;
-            document = new PDFDocument(filename: "Scan" + ScanCounter);
-            Console.WriteLine(DateTime.Now + "Scan: " + document.GetFileName());
-        }
-
         public void ScanAndPrint()
         {
-            ScanCounter++;
-            PrintCounter++;
             if (state == IDevice.State.off) return;
             Scan(out IDocument document, IDocument.FormatType.JPG);
             Print(in document);
