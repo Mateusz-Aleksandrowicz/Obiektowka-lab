@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,13 +8,14 @@ using System.Threading.Tasks;
 
 namespace lab3_pudelko
 { 
-    public class Pudelko : IEquatable<Pudelko>
+    public class Pudelko : IEquatable<Pudelko> , IEnumerable<decimal>
     {
         // przechowuje w metrach
         private decimal a;
         private decimal b;
         private decimal c;
-        public UnitOfMeasure UnitOfMeasure { get; set; }
+        public UnitOfMeasure UnitOfMeasure { get; init; }
+        private decimal[] _parameters;
 
         public decimal A
         {
@@ -57,6 +59,7 @@ namespace lab3_pudelko
             A = Converter.ConvertMeters(a, UnitOfMeasure);
             B = Converter.ConvertMeters(b, UnitOfMeasure);
             C = Converter.ConvertMeters(c, UnitOfMeasure);
+            _parameters = new[] { A, B, C };
         }
 
         public override bool Equals(object? obj)
@@ -65,9 +68,8 @@ namespace lab3_pudelko
             if (ReferenceEquals(this, obj)) return true;
             if (!(obj is Pudelko)) return false;
             var box = (Pudelko)obj;
-            var parameters = new List<decimal> { A, B, C };
-            var parametersCompared = new List<decimal> { box.A, box.B, box.C };
-            return parameters.All(parametersCompared.Contains) && parameters.Count == parametersCompared.Count;
+            var parametersCompared = new[] { box.A, box.B, box.C };
+            return _parameters.All(parametersCompared.Contains) && _parameters.Length == parametersCompared.Length;
         }
 
         public bool Equals(Pudelko? box)
@@ -97,7 +99,18 @@ namespace lab3_pudelko
             return leftBox.Equals(rightBox);
         }
 
-        public static bool operator !=(Pudelko? leftBox, Pudelko? rightBox) => !(leftBox == rightBox);
+        public static Pudelko operator +(Pudelko leftBox, Pudelko rightBox)
+        {
+            var leftBoxParameters = new[] { leftBox.A, leftBox.B, leftBox.C }.OrderByDescending(a => a).ToArray();
+            var rightBoxParameters = new[] { rightBox.A, rightBox.B, rightBox.C }.OrderByDescending(a => a).ToArray();
+            var a = new[] { leftBoxParameters[0], rightBoxParameters[0] }.Max();
+            var b = new[] { leftBoxParameters[1], rightBoxParameters[1] }.Max();
+            var c = leftBoxParameters[2] + rightBoxParameters[2];
+            return new Pudelko(a, b, c);
+        }
+
+        public decimal this[int index] => _parameters[index];
+
 
         public override string ToString()
         {
@@ -129,6 +142,19 @@ namespace lab3_pudelko
             else
             {
                 throw new FormatException();
+            }
+        }
+
+        public IEnumerator<decimal> GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            foreach (var parameter in _parameters)
+            {
+                yield return parameter;
             }
         }
     }
