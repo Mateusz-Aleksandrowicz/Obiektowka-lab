@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
 namespace lab3_pudelko
-{ 
-    public class Pudelko : IEquatable<Pudelko> , IEnumerable<decimal>
+{
+    public class Pudelko : IEquatable<Pudelko>, IEnumerable<decimal>
     {
-        // przechowuje w metrach
         private decimal a;
         private decimal b;
         private decimal c;
@@ -37,28 +37,34 @@ namespace lab3_pudelko
 
         public decimal Objetosc
         {
-            get {
+            get
+            {
                 return Math.Round(a * b * c, 9);
             }
         }
         public decimal Pole
         {
-            get {
+            get
+            {
                 return Math.Round(a * b * 2 + a * c * 2 + b * c * 2, 6);
             }
         }
 
-        public Pudelko(decimal a = 0.1m, decimal b = 0.1m, decimal c = 0.1m, UnitOfMeasure unitOfMeasure = UnitOfMeasure.Meter)
+        public Pudelko(decimal a = decimal.MinValue, decimal b = decimal.MinValue, decimal c = decimal.MinValue,
+             UnitOfMeasure unit = UnitOfMeasure.Meter)
         {
-            if (a < 0 || b < 0 || c < 0 || a > 10 || b > 10 || c > 10)
+            UnitOfMeasure = unit;
+            if (a == decimal.MinValue) A = 0.1m;
+            else A = Converter.ConvertMeters(a, UnitOfMeasure);
+            if (b == decimal.MinValue) B = 0.1m;
+            else B = Converter.ConvertMeters(b, UnitOfMeasure);
+            if (c == decimal.MinValue) C = 0.1m;
+            else C = Converter.ConvertMeters(c, UnitOfMeasure);
+
+            if (A <= 0 || B <= 0 || C <= 0 || A > 10 || B > 10 || C > 10)
             {
                 throw new ArgumentOutOfRangeException();
             }
-
-            UnitOfMeasure = unitOfMeasure;
-            A = Converter.ConvertMeters(a, UnitOfMeasure);
-            B = Converter.ConvertMeters(b, UnitOfMeasure);
-            C = Converter.ConvertMeters(c, UnitOfMeasure);
             _parameters = new[] { A, B, C };
         }
 
@@ -98,7 +104,7 @@ namespace lab3_pudelko
             }
             return leftBox.Equals(rightBox);
         }
-
+        public static bool operator !=(Pudelko? leftBox, Pudelko? rightBox) => !(leftBox == rightBox);
         public static Pudelko operator +(Pudelko leftBox, Pudelko rightBox)
         {
             var leftBoxParameters = new[] { leftBox.A, leftBox.B, leftBox.C }.OrderByDescending(a => a).ToArray();
@@ -109,6 +115,11 @@ namespace lab3_pudelko
             return new Pudelko(a, b, c);
         }
 
+        public static explicit operator double[](Pudelko box) => new[]
+           { Convert.ToDouble(box.A), Convert.ToDouble(box.B), Convert.ToDouble(box.C) };
+
+        public static implicit operator Pudelko(ValueTuple<int, int, int> values) =>
+           new(values.Item1, values.Item2, values.Item3, UnitOfMeasure.Milimeter);
         public decimal this[int index] => _parameters[index];
 
 
@@ -119,15 +130,15 @@ namespace lab3_pudelko
 
         public string ToString(string format)
         {
-            if(format == "cm")
+            if (format == "cm")
             {
-                return(
+                return (
                 $"{Math.Round(Converter.ConvertCentimeters(A), 1)} cm × " +
                 $"{Math.Round(Converter.ConvertCentimeters(B), 1)} cm × " +
                 $"{Math.Round(Converter.ConvertCentimeters(C), 1)} cm"
                 );
             }
-            else if(format == "mm")
+            else if (format == "mm")
             {
                 return (
                 $"{Math.Round(Converter.ConvertMilimeters(A), 0)} cm × " +
@@ -135,7 +146,7 @@ namespace lab3_pudelko
                 $"{Math.Round(Converter.ConvertMilimeters(C), 0)} cm"
                 );
             }
-            else if(format == "m")
+            else if (format == "m")
             {
                 return ToString();
             }
@@ -156,6 +167,37 @@ namespace lab3_pudelko
             {
                 yield return parameter;
             }
+        }
+        public static Pudelko Parse(string input)
+        {
+            var regex = new Regex(@"([0-9]+\.?[0-9]*) ([m,mm,cm]+)");
+            var matches = regex.Matches(input);
+            if (matches.Count != 3)
+            {
+                throw new FormatException();
+            }
+
+            var values = matches.Select(a => decimal.Parse(a.Groups[1].Value)).ToArray();
+            if (values.Count() != 3)
+            {
+                throw new FormatException();
+            }
+            var unitOfMeasureString = matches[0].Groups[2].Value;
+            var unitOfMeasure = UnitOfMeasure.Unknown;
+            switch (unitOfMeasureString)
+            {
+                case "m":
+                    unitOfMeasure = UnitOfMeasure.Meter;
+                    break;
+                case "cm":
+                    unitOfMeasure = UnitOfMeasure.Centimeter;
+                    break;
+                case "mm":
+                    unitOfMeasure = UnitOfMeasure.Milimeter;
+                    break;
+            }
+
+            return new Pudelko(values[0], values[1], values[2], unitOfMeasure);
         }
     }
 }
