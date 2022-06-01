@@ -8,10 +8,12 @@
     <None Remove="assets\" />
     <None Remove="src\" />
     <None Remove="src\Interfaces\" />
+    <None Remove="src\Classes\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="assets\" />
     <Folder Include="src\" />
     <Folder Include="src\Interfaces\" />
+    <Folder Include="src\Classes\" />
   </ItemGroup>
 </Project>
