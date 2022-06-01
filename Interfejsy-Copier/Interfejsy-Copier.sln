@@ -19,6 +19,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pudelko", "Pudelko\Pudelko.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestPudelko", "UnitTestPudelko\UnitTestPudelko.csproj", "{77AC7767-D85C-41FB-881B-297A5EE17D9E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TempElementsLib", "TempElementsLib", "{AB382BB1-4AA7-466F-BE63-CC69ECEE8061}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TempElementsLib", "TempElementsLib\TempElementsLib.csproj", "{6250CC4B-279D-4037-877A-7D8A1166BA08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,11 +61,18 @@ Global
 		{77AC7767-D85C-41FB-881B-297A5EE17D9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77AC7767-D85C-41FB-881B-297A5EE17D9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77AC7767-D85C-41FB-881B-297A5EE17D9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6250CC4B-279D-4037-877A-7D8A1166BA08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6250CC4B-279D-4037-877A-7D8A1166BA08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6250CC4B-279D-4037-877A-7D8A1166BA08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6250CC4B-279D-4037-877A-7D8A1166BA08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FEDFB1E9-8E1B-4DA2-A004-3337E100251F}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6250CC4B-279D-4037-877A-7D8A1166BA08} = {AB382BB1-4AA7-466F-BE63-CC69ECEE8061}
 	EndGlobalSection
 EndGlobal
