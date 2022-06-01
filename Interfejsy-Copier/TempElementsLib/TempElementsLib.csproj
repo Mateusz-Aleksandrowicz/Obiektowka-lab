@@ -14,9 +14,4 @@
     <Folder Include="src\" />
     <Folder Include="src\Interfaces\" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\..\..\..\Downloads\cs-lab-TempElementsFramework-main\src\TempElementsList.cs">
-      <Link>src\TempElementsList.cs</Link>
-    </Compile>
-  </ItemGroup>
 </Project>
